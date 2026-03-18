@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pomodoro + Energy</title>
+<title>Pomodoro GOD MODE</title>
 
 <style>
 * {
@@ -18,12 +18,11 @@ body {
     background: url('mary.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* KEY CHANGE */
-    padding: 0 80px; /* spacing from edges */
+    justify-content: space-between;
+    padding: 0 80px;
     position: relative;
 }
 
-/* Overlay */
 body::before {
     content: "";
     position: absolute;
@@ -32,16 +31,14 @@ body::before {
     background: rgba(0,0,0,0.5);
 }
 
-/* Main layout */
 .main {
     position: relative;
     z-index: 1;
     display: flex;
-    justify-content: space-between; /* push both cards apart */
+    justify-content: space-between;
     width: 100%;
 }
 
-/* Glass card */
 .container {
     backdrop-filter: blur(15px);
     background: rgba(255,255,255,0.1);
@@ -52,16 +49,13 @@ body::before {
     width: 320px;
 }
 
-/* Timer */
+/* TIMER */
 #time {
     font-size: 3rem;
     margin: 20px 0;
 }
 
-/* Buttons */
-.buttons button,
-.modes button,
-.juice-card button {
+button {
     margin: 6px;
     padding: 10px 15px;
     border: none;
@@ -69,7 +63,6 @@ body::before {
     background: rgba(255,255,255,0.2);
     color: white;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 button:hover {
@@ -80,7 +73,6 @@ button:hover {
     background: #ff4c4c !important;
 }
 
-/* Circle */
 svg {
     transform: rotate(-90deg);
 }
@@ -95,10 +87,9 @@ circle {
     stroke: #ff4c4c;
     stroke-dasharray: 565;
     stroke-dashoffset: 565;
-    transition: stroke-dashoffset 1s linear;
 }
 
-/* Juice cup */
+/* CUP */
 .cup {
     width: 120px;
     height: 180px;
@@ -107,28 +98,83 @@ circle {
     margin: 20px auto;
     position: relative;
     overflow: hidden;
+    transition: 0.3s;
 }
 
+/* LIQUID + WAVES */
 .liquid {
     position: absolute;
     bottom: 0;
     width: 100%;
     height: 0%;
-    background: linear-gradient(to top, orange, yellow);
+    overflow: hidden;
     transition: height 0.5s;
 }
 
-/* Mobile */
+.liquid::before,
+.liquid::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -150%;
+    left: -50%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 40%;
+    animation: wave 6s linear infinite;
+}
+
+.liquid::after {
+    animation: wave 10s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* BUBBLES */
+.bubbles span {
+    position: absolute;
+    bottom: 0;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: rise 3s infinite;
+}
+
+@keyframes rise {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-180px); opacity: 0; }
+}
+
+/* STEAM */
+.steam span {
+    position: absolute;
+    top: -20px;
+    width: 6px;
+    height: 20px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    animation: steamUp 3s infinite;
+}
+
+@keyframes steamUp {
+    0% { transform: translateY(0); opacity: 0.5; }
+    100% { transform: translateY(-40px); opacity: 0; }
+}
+
+/* MOBILE */
 @media (max-width: 700px) {
     body {
         justify-content: center;
         padding: 20px;
     }
-
     .main {
         flex-direction: column;
         align-items: center;
-        gap: 30px;
     }
 }
 </style>
@@ -138,131 +184,149 @@ circle {
 
 <div class="main">
 
-    <!-- LEFT: TIMER -->
-    <div class="container">
-        <h2>🍅 Pomodoro</h2>
+<!-- TIMER -->
+<div class="container">
+    <h2>🍅 Pomodoro</h2>
 
-        <svg width="200" height="200">
-            <circle cx="100" cy="100" r="90"></circle>
-            <circle cx="100" cy="100" r="90" class="progress"></circle>
-        </svg>
+    <svg width="200" height="200">
+        <circle cx="100" cy="100" r="90"></circle>
+        <circle cx="100" cy="100" r="90" class="progress"></circle>
+    </svg>
 
-        <div id="time">25:00</div>
+    <div id="time">25:00</div>
 
-        <div class="modes">
-            <button onclick="setMode(event,25)" class="active">Focus</button>
-            <button onclick="setMode(event,5)">Short</button>
-            <button onclick="setMode(event,15)">Long</button>
-        </div>
-
-        <div class="buttons">
-            <button onclick="startTimer()">Start</button>
-            <button onclick="pauseTimer()">Pause</button>
-            <button onclick="resetTimer()">Reset</button>
-        </div>
+    <div class="modes">
+        <button onclick="setMode(event,25)" class="active">Focus</button>
+        <button onclick="setMode(event,5)">Short</button>
+        <button onclick="setMode(event,15)">Long</button>
     </div>
 
-    <!-- RIGHT: JUICE -->
-    <div class="container juice-card">
-        <h2>🧃 Energy</h2>
-
-        <div class="cup">
-            <div class="liquid" id="liquid"></div>
-        </div>
-
-        <p id="energyText">Stay focused...</p>
-        <button onclick="drinkJuice()">Drink</button>
+    <div>
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
     </div>
+
+    <button onclick="startCamera()">Detect Mood</button>
+    <video id="video" width="200" autoplay style="display:none;"></video>
+</div>
+
+<!-- CUP -->
+<div class="container">
+    <h2>🧃 Energy</h2>
+
+    <div class="cup">
+        <div class="liquid" id="liquid"></div>
+        <div class="bubbles" id="bubbles"></div>
+        <div class="steam" id="steam"></div>
+    </div>
+
+    <p id="energyText">Stay focused...</p>
+    <button onclick="drinkJuice()">Drink</button>
+</div>
 
 </div>
 
-<script>
-let time = 1500;
-let totalTime = time;
-let interval = null;
-let energy = 0;
+<!-- SOUNDS -->
+<audio id="juiceSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+<audio id="coffeeSound" src="https://www.soundjay.com/button/beep-10.wav"></audio>
+<audio id="energySound" src="https://www.soundjay.com/button/beep-09.wav"></audio>
 
-const timeDisplay = document.getElementById("time");
+<script>
+let time = 1500, totalTime = time, interval = null, energy = 0;
 const progress = document.querySelector(".progress");
 
-/* TIMER */
 function updateDisplay() {
-    let min = Math.floor(time / 60);
-    let sec = time % 60;
-
-    timeDisplay.textContent =
+    let min = Math.floor(time/60), sec = time%60;
+    document.getElementById("time").textContent =
         `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-
-    let progressValue = 565 - (565 * time / totalTime);
-    progress.style.strokeDashoffset = progressValue;
+    progress.style.strokeDashoffset = 565 - (565*time/totalTime);
 }
 
 function startTimer() {
     if (interval) return;
-
     interval = setInterval(() => {
         if (time > 0) {
-            time--;
-            updateDisplay();
-
-            if (energy < 100) {
-                energy += 0.5;
-                updateJuice();
-            }
-
-        } else {
-            clearInterval(interval);
-            interval = null;
-            alert("Time's up!");
-        }
-    }, 1000);
+            time--; updateDisplay();
+            if (energy < 100) { energy += 0.5; updateJuice(); }
+        } else { clearInterval(interval); interval=null; alert("Done!"); }
+    },1000);
 }
 
-function pauseTimer() {
-    clearInterval(interval);
-    interval = null;
-}
+function pauseTimer(){ clearInterval(interval); interval=null; }
+function resetTimer(){ pauseTimer(); time=totalTime; energy=0; updateDisplay(); updateJuice(); }
 
-function resetTimer() {
-    pauseTimer();
-    time = totalTime;
-    energy = 0;
-    updateDisplay();
-    updateJuice();
-}
-
-function setMode(e, minutes) {
-    document.querySelectorAll(".modes button").forEach(btn => btn.classList.remove("active"));
+function setMode(e,min){
+    document.querySelectorAll(".modes button").forEach(b=>b.classList.remove("active"));
     e.target.classList.add("active");
+    pauseTimer(); time=min*60; totalTime=time; energy=0;
+    updateDisplay(); updateJuice();
+}
 
-    pauseTimer();
-    time = minutes * 60;
-    totalTime = time;
-    energy = 0;
+function playSound(type){
+    if(!interval) return;
+    let s=document.getElementById(type+"Sound");
+    s.currentTime=0; s.play();
+}
 
-    updateDisplay();
+function updateJuice(){
+    let liquid=document.getElementById("liquid"),
+        text=document.getElementById("energyText"),
+        cup=document.querySelector(".cup"),
+        bubbles=document.getElementById("bubbles"),
+        steam=document.getElementById("steam");
+
+    liquid.style.height=energy+"%";
+    bubbles.innerHTML=""; steam.innerHTML="";
+
+    if(energy<30){
+        liquid.style.background="linear-gradient(to top,#ff7e5f,#feb47b)";
+        text.textContent="Juice 🧃";
+        cup.style.borderColor="#ff9966";
+        playSound("juice");
+    }
+    else if(energy<70){
+        liquid.style.background="linear-gradient(to top,#3e2723,#795548)";
+        text.textContent="Coffee ☕";
+        cup.style.borderColor="#6d4c41";
+        for(let i=0;i<3;i++){
+            let s=document.createElement("span");
+            s.style.left=(30+i*20)+"px";
+            steam.appendChild(s);
+        }
+        playSound("coffee");
+    }
+    else{
+        liquid.style.background="linear-gradient(to top,#00ffcc,#00cc66)";
+        text.textContent="Energy ⚡";
+        cup.style.borderColor="#00ffcc";
+        for(let i=0;i<6;i++){
+            let b=document.createElement("span");
+            b.style.left=Math.random()*100+"%";
+            bubbles.appendChild(b);
+        }
+        playSound("energy");
+    }
+}
+
+function drinkJuice(){ energy=0; updateJuice(); }
+
+function startCamera(){
+    let v=document.getElementById("video");
+    navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+        v.srcObject=s; v.style.display="block";
+        setTimeout(detectMood,3000);
+    });
+}
+
+function detectMood(){
+    let moods=["tired","normal","focused"];
+    let m=moods[Math.floor(Math.random()*3)];
+    energy = m==="tired"?20 : m==="normal"?50 : 80;
     updateJuice();
 }
 
-/* JUICE */
-function updateJuice() {
-    const liquid = document.getElementById("liquid");
-    liquid.style.height = energy + "%";
-
-    let text = document.getElementById("energyText");
-
-    if (energy < 30) text.textContent = "Low energy 😴";
-    else if (energy < 70) text.textContent = "Getting there ⚡";
-    else text.textContent = "FULL POWER 🚀";
-}
-
-function drinkJuice() {
-    energy = 0;
-    updateJuice();
-}
-
-updateDisplay();
-updateJuice();
+updateDisplay(); updateJuice();
 </script>
 
 </body>
