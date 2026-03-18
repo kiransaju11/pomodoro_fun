@@ -3,179 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pomodoro GOD MODE</title>
+<title>Pomodoro Final Boss</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI';}
+
+body{
+    height:100vh;
+    background:url('mary.jpg') center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 60px;
+    position:relative;
+}
+body::before{
+    content:"";
+    position:absolute;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.5);
 }
 
-body {
-    height: 100vh;
-    background: url('mary.jpg') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 80px;
-    position: relative;
+.main{
+    position:relative;
+    z-index:1;
+    display:flex;
+    justify-content:space-between;
+    width:100%;
 }
 
-body::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-}
-
-.main {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.container {
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 30px;
-    text-align: center;
-    color: white;
-    width: 320px;
+/* CARD */
+.container{
+    backdrop-filter:blur(15px);
+    background:rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:25px;
+    color:white;
+    text-align:center;
+    width:320px;
 }
 
 /* TIMER */
-#time {
-    font-size: 3rem;
-    margin: 20px 0;
+#time{font-size:3rem;margin:15px 0;}
+button{
+    margin:5px;
+    padding:8px 12px;
+    border:none;
+    border-radius:8px;
+    background:rgba(255,255,255,0.2);
+    color:white;
+    cursor:pointer;
 }
+button:hover{background:rgba(255,255,255,0.4);}
+.active{background:#ff4c4c !important;}
 
-button {
-    margin: 6px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.2);
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: rgba(255,255,255,0.4);
-}
-
-.active {
-    background: #ff4c4c !important;
-}
-
-svg {
-    transform: rotate(-90deg);
-}
-
-circle {
-    fill: none;
-    stroke-width: 8;
-    stroke: rgba(255,255,255,0.2);
-}
-
-.progress {
-    stroke: #ff4c4c;
-    stroke-dasharray: 565;
-    stroke-dashoffset: 565;
-}
+svg{transform:rotate(-90deg);}
+circle{fill:none;stroke-width:8;stroke:rgba(255,255,255,0.2);}
+.progress{stroke:#ff4c4c;stroke-dasharray:565;}
 
 /* CUP */
-.cup {
-    width: 120px;
-    height: 180px;
-    border: 3px solid white;
-    border-radius: 10px 10px 30px 30px;
-    margin: 20px auto;
-    position: relative;
-    overflow: hidden;
-    transition: 0.3s;
+.cup{
+    width:120px;height:180px;
+    border:3px solid white;
+    border-radius:10px 10px 30px 30px;
+    margin:20px auto;
+    position:relative;
+    overflow:hidden;
+    transition:0.4s;
+}
+.cup.juice{box-shadow:0 0 20px #ff9966;}
+.cup.coffee{box-shadow:0 0 20px #6d4c41;}
+.cup.energy{box-shadow:0 0 25px #00ffcc;}
+
+.liquid{
+    position:absolute;bottom:0;width:100%;
+    height:0%;
+    overflow:hidden;
+    transition:height 0.6s ease, background 0.6s ease;
 }
 
-/* LIQUID + WAVES */
-.liquid {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 0%;
-    overflow: hidden;
-    transition: height 0.5s;
+/* WAVES */
+.liquid::before,.liquid::after{
+    content:"";
+    position:absolute;
+    width:200%;height:200%;
+    top:-150%;left:-50%;
+    background:rgba(255,255,255,0.3);
+    border-radius:40%;
+    animation:wave 6s linear infinite;
 }
-
-.liquid::before,
-.liquid::after {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -150%;
-    left: -50%;
-    background: rgba(255,255,255,0.3);
-    border-radius: 40%;
-    animation: wave 6s linear infinite;
-}
-
-.liquid::after {
-    animation: wave 10s linear infinite;
-    opacity: 0.5;
-}
-
-@keyframes wave {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+.liquid::after{animation:wave 10s linear infinite;opacity:0.5;}
+@keyframes wave{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
 
 /* BUBBLES */
-.bubbles span {
-    position: absolute;
-    bottom: 0;
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-    animation: rise 3s infinite;
+.bubbles span{
+    position:absolute;bottom:0;
+    width:6px;height:6px;
+    background:white;border-radius:50%;
+    animation:rise 3s infinite;
 }
-
-@keyframes rise {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-180px); opacity: 0; }
-}
+@keyframes rise{0%{transform:translateY(0);}100%{transform:translateY(-180px);opacity:0;}}
 
 /* STEAM */
-.steam span {
-    position: absolute;
-    top: -20px;
-    width: 6px;
-    height: 20px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 50%;
-    animation: steamUp 3s infinite;
+.steam span{
+    position:absolute;top:-20px;
+    width:6px;height:20px;
+    background:rgba(255,255,255,0.4);
+    border-radius:50%;
+    animation:steam 3s infinite;
 }
+@keyframes steam{0%{transform:translateY(0);}100%{transform:translateY(-40px);opacity:0;}}
 
-@keyframes steamUp {
-    0% { transform: translateY(0); opacity: 0.5; }
-    100% { transform: translateY(-40px); opacity: 0; }
+/* DRINK BUTTONS */
+.drink-selector{display:flex;justify-content:center;gap:8px;}
+.drink-selector button:hover{transform:scale(1.1);}
+
+/* HEATMAP */
+.heatmap{
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:5px;margin-top:10px;
 }
+.day{width:18px;height:18px;border-radius:4px;background:#222;}
+.level-1{background:#9be9a8;}
+.level-2{background:#40c463;}
+.level-3{background:#30a14e;}
+.level-4{background:#216e39;}
 
-/* MOBILE */
-@media (max-width: 700px) {
-    body {
-        justify-content: center;
-        padding: 20px;
-    }
-    .main {
-        flex-direction: column;
-        align-items: center;
-    }
+@media(max-width:700px){
+    body{justify-content:center;padding:20px;}
+    .main{flex-direction:column;align-items:center;gap:20px;}
 }
 </style>
 </head>
@@ -186,147 +143,201 @@ circle {
 
 <!-- TIMER -->
 <div class="container">
-    <h2>🍅 Pomodoro</h2>
+<h2>🍅 Pomodoro</h2>
 
-    <svg width="200" height="200">
-        <circle cx="100" cy="100" r="90"></circle>
-        <circle cx="100" cy="100" r="90" class="progress"></circle>
-    </svg>
+<svg width="200" height="200">
+<circle cx="100" cy="100" r="90"></circle>
+<circle cx="100" cy="100" r="90" class="progress"></circle>
+</svg>
 
-    <div id="time">25:00</div>
+<div id="time">25:00</div>
 
-    <div class="modes">
-        <button onclick="setMode(event,25)" class="active">Focus</button>
-        <button onclick="setMode(event,5)">Short</button>
-        <button onclick="setMode(event,15)">Long</button>
-    </div>
+<div>
+<button onclick="setMode(event,25)" class="active">Focus</button>
+<button onclick="setMode(event,5)">Short</button>
+<button onclick="setMode(event,15)">Long</button>
+</div>
 
-    <div>
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
-    </div>
+<button onclick="startTimer()">Start</button>
+<button onclick="pauseTimer()">Pause</button>
+<button onclick="resetTimer()">Reset</button>
 
-    <button onclick="startCamera()">Detect Mood</button>
-    <video id="video" width="200" autoplay style="display:none;"></video>
+<button onclick="startCamera()">Detect Mood</button>
+<video id="video" width="200" autoplay style="display:none;"></video>
 </div>
 
 <!-- CUP -->
 <div class="container">
-    <h2>🧃 Energy</h2>
+<h2>🧃 Energy</h2>
 
-    <div class="cup">
-        <div class="liquid" id="liquid"></div>
-        <div class="bubbles" id="bubbles"></div>
-        <div class="steam" id="steam"></div>
-    </div>
+<div class="cup">
+<div class="liquid" id="liquid"></div>
+<div class="bubbles" id="bubbles"></div>
+<div class="steam" id="steam"></div>
+</div>
 
-    <p id="energyText">Stay focused...</p>
-    <button onclick="drinkJuice()">Drink</button>
+<p id="energyText"></p>
+
+<div class="drink-selector">
+<button onclick="setDrink('juice')">🧃</button>
+<button onclick="setDrink('coffee')">☕</button>
+<button onclick="setDrink('energy')">⚡</button>
+</div>
+
+<button onclick="drinkJuice()">Reset Drink</button>
+</div>
+
+<!-- HEATMAP -->
+<div class="container">
+<h2>📊 Productivity</h2>
+<div id="heatmap" class="heatmap"></div>
 </div>
 
 </div>
 
-<!-- SOUNDS -->
+<!-- SOUND -->
 <audio id="juiceSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 <audio id="coffeeSound" src="https://www.soundjay.com/button/beep-10.wav"></audio>
 <audio id="energySound" src="https://www.soundjay.com/button/beep-09.wav"></audio>
 
 <script>
-let time = 1500, totalTime = time, interval = null, energy = 0;
-const progress = document.querySelector(".progress");
+let time=1500,totalTime=time,interval=null,energy=0;
+let manualDrink=null,soundEnabled=false;
 
-function updateDisplay() {
-    let min = Math.floor(time/60), sec = time%60;
-    document.getElementById("time").textContent =
-        `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-    progress.style.strokeDashoffset = 565 - (565*time/totalTime);
+const progress=document.querySelector(".progress");
+
+function updateDisplay(){
+let m=Math.floor(time/60),s=time%60;
+document.getElementById("time").textContent=
+`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+progress.style.strokeDashoffset=565-(565*time/totalTime);
 }
 
-function startTimer() {
-    if (interval) return;
-    interval = setInterval(() => {
-        if (time > 0) {
-            time--; updateDisplay();
-            if (energy < 100) { energy += 0.5; updateJuice(); }
-        } else { clearInterval(interval); interval=null; alert("Done!"); }
-    },1000);
+function startTimer(){
+if(interval)return;
+soundEnabled=true;
+interval=setInterval(()=>{
+if(time>0){
+time--;updateDisplay();
+if(energy<100){energy+=0.5;updateJuice();}
+}else{
+clearInterval(interval);interval=null;
+saveSession();
+alert("Session Complete!");
+}
+},1000);
 }
 
-function pauseTimer(){ clearInterval(interval); interval=null; }
-function resetTimer(){ pauseTimer(); time=totalTime; energy=0; updateDisplay(); updateJuice(); }
+function pauseTimer(){clearInterval(interval);interval=null;}
+function resetTimer(){pauseTimer();time=totalTime;energy=0;manualDrink=null;updateDisplay();updateJuice();}
 
 function setMode(e,min){
-    document.querySelectorAll(".modes button").forEach(b=>b.classList.remove("active"));
-    e.target.classList.add("active");
-    pauseTimer(); time=min*60; totalTime=time; energy=0;
-    updateDisplay(); updateJuice();
+document.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+e.target.classList.add("active");
+pauseTimer();time=min*60;totalTime=time;energy=0;manualDrink=null;
+updateDisplay();updateJuice();
 }
 
 function playSound(type){
-    if(!interval) return;
-    let s=document.getElementById(type+"Sound");
-    s.currentTime=0; s.play();
+if(!soundEnabled)return;
+let s=document.getElementById(type+"Sound");
+s.currentTime=0;s.play().catch(()=>{});
+}
+
+function setDrink(type){
+manualDrink=type;
+energy= type==="juice"?20: type==="coffee"?50:90;
+updateJuice();
 }
 
 function updateJuice(){
-    let liquid=document.getElementById("liquid"),
-        text=document.getElementById("energyText"),
-        cup=document.querySelector(".cup"),
-        bubbles=document.getElementById("bubbles"),
-        steam=document.getElementById("steam");
+let liquid=document.getElementById("liquid"),
+text=document.getElementById("energyText"),
+cup=document.querySelector(".cup"),
+bubbles=document.getElementById("bubbles"),
+steam=document.getElementById("steam");
 
-    liquid.style.height=energy+"%";
-    bubbles.innerHTML=""; steam.innerHTML="";
+liquid.style.height=energy+"%";
+bubbles.innerHTML="";steam.innerHTML="";
+cup.classList.remove("juice","coffee","energy");
 
-    if(energy<30){
-        liquid.style.background="linear-gradient(to top,#ff7e5f,#feb47b)";
-        text.textContent="Juice 🧃";
-        cup.style.borderColor="#ff9966";
-        playSound("juice");
-    }
-    else if(energy<70){
-        liquid.style.background="linear-gradient(to top,#3e2723,#795548)";
-        text.textContent="Coffee ☕";
-        cup.style.borderColor="#6d4c41";
-        for(let i=0;i<3;i++){
-            let s=document.createElement("span");
-            s.style.left=(30+i*20)+"px";
-            steam.appendChild(s);
-        }
-        playSound("coffee");
-    }
-    else{
-        liquid.style.background="linear-gradient(to top,#00ffcc,#00cc66)";
-        text.textContent="Energy ⚡";
-        cup.style.borderColor="#00ffcc";
-        for(let i=0;i<6;i++){
-            let b=document.createElement("span");
-            b.style.left=Math.random()*100+"%";
-            bubbles.appendChild(b);
-        }
-        playSound("energy");
-    }
+if(manualDrink==="juice" || (manualDrink===null && energy<30)){
+liquid.style.background="linear-gradient(#ff7e5f,#feb47b)";
+text.textContent="Juice 🧃";
+cup.classList.add("juice");
+playSound("juice");
+}
+else if(manualDrink==="coffee" || (manualDrink===null && energy<70)){
+liquid.style.background="linear-gradient(#3e2723,#795548)";
+text.textContent="Coffee ☕";
+cup.classList.add("coffee");
+for(let i=0;i<3;i++){
+let s=document.createElement("span");
+s.style.left=(30+i*20)+"px";
+steam.appendChild(s);
+}
+playSound("coffee");
+}
+else{
+liquid.style.background="linear-gradient(#00ffcc,#00cc66)";
+text.textContent="Energy ⚡";
+cup.classList.add("energy");
+for(let i=0;i<6;i++){
+let b=document.createElement("span");
+b.style.left=Math.random()*100+"%";
+bubbles.appendChild(b);
+}
+playSound("energy");
+}
 }
 
-function drinkJuice(){ energy=0; updateJuice(); }
+function drinkJuice(){energy=0;manualDrink=null;updateJuice();}
 
+/* CAMERA */
 function startCamera(){
-    let v=document.getElementById("video");
-    navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
-        v.srcObject=s; v.style.display="block";
-        setTimeout(detectMood,3000);
-    });
+let v=document.getElementById("video");
+navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+v.srcObject=s;v.style.display="block";
+setTimeout(detectMood,3000);
+});
 }
-
 function detectMood(){
-    let moods=["tired","normal","focused"];
-    let m=moods[Math.floor(Math.random()*3)];
-    energy = m==="tired"?20 : m==="normal"?50 : 80;
-    updateJuice();
+let moods=["tired","normal","focused"];
+let m=moods[Math.floor(Math.random()*3)];
+energy = m==="tired"?20 : m==="normal"?50 : 80;
+updateJuice();
 }
 
-updateDisplay(); updateJuice();
+/* HEATMAP */
+function getToday(){return new Date().toISOString().split("T")[0];}
+function saveSession(){
+let d=JSON.parse(localStorage.getItem("data"))||{};
+let t=getToday();
+d[t]=(d[t]||0)+1;
+localStorage.setItem("data",JSON.stringify(d));
+renderHeatmap();
+}
+function renderHeatmap(){
+let c=document.getElementById("heatmap");
+c.innerHTML="";
+let d=JSON.parse(localStorage.getItem("data"))||{};
+for(let i=0;i<100;i++){
+let day=new Date();day.setDate(day.getDate()-i);
+let key=day.toISOString().split("T")[0];
+let count=d[key]||0;
+let div=document.createElement("div");
+div.classList.add("day");
+if(count>=1)div.classList.add("level-1");
+if(count>=3)div.classList.add("level-2");
+if(count>=5)div.classList.add("level-3");
+if(count>=8)div.classList.add("level-4");
+c.appendChild(div);
+}
+}
+
+updateDisplay();
+updateJuice();
+renderHeatmap();
 </script>
 
 </body>
