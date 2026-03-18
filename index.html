@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pomodoro</title>
+<title>Pomodoro + Energy</title>
 
 <style>
 * {
@@ -18,11 +18,11 @@ body {
     background: url('mary.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* move left */
-    padding-left: 60px; /* spacing from edge */
+    justify-content: center;
+    position: relative;
 }
 
-/* Dark overlay */
+/* Overlay */
 body::before {
     content: "";
     position: absolute;
@@ -31,29 +31,37 @@ body::before {
     background: rgba(0,0,0,0.5);
 }
 
-/* Glass container */
-.container {
+/* Main layout */
+.main {
     position: relative;
     z-index: 1;
+    display: flex;
+    gap: 50px;
+}
+
+/* Glass card */
+.container {
     backdrop-filter: blur(15px);
     background: rgba(255,255,255,0.1);
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px;
     text-align: center;
     color: white;
     width: 320px;
 }
 
-/* Timer text */
+/* Timer */
 #time {
     font-size: 3rem;
     margin: 20px 0;
 }
 
 /* Buttons */
-.buttons button {
-    margin: 8px;
-    padding: 10px 18px;
+.buttons button,
+.modes button,
+.juice-card button {
+    margin: 6px;
+    padding: 10px 15px;
     border: none;
     border-radius: 10px;
     background: rgba(255,255,255,0.2);
@@ -62,26 +70,15 @@ body::before {
     transition: 0.3s;
 }
 
-.buttons button:hover {
+button:hover {
     background: rgba(255,255,255,0.4);
-}
-
-/* Mode buttons */
-.modes button {
-    margin: 5px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background: rgba(255,255,255,0.2);
-    color: white;
 }
 
 .active {
     background: #ff4c4c !important;
 }
 
-/* Circle progress */
+/* Circle */
 svg {
     transform: rotate(-90deg);
 }
@@ -98,47 +95,95 @@ circle {
     stroke-dashoffset: 565;
     transition: stroke-dashoffset 1s linear;
 }
+
+/* Juice cup */
+.cup {
+    width: 120px;
+    height: 180px;
+    border: 3px solid white;
+    border-radius: 10px 10px 30px 30px;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.liquid {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to top, orange, yellow);
+    transition: height 0.5s;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .main {
+        flex-direction: column;
+        align-items: center;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h2>🍅 Pomodoro</h2>
+<div class="main">
 
-    <svg width="200" height="200">
-        <circle cx="100" cy="100" r="90"></circle>
-        <circle cx="100" cy="100" r="90" class="progress"></circle>
-    </svg>
+    <!-- TIMER -->
+    <div class="container">
+        <h2>🍅 Pomodoro</h2>
 
-    <div id="time">25:00</div>
+        <svg width="200" height="200">
+            <circle cx="100" cy="100" r="90"></circle>
+            <circle cx="100" cy="100" r="90" class="progress"></circle>
+        </svg>
 
-    <div class="modes">
-        <button onclick="setMode(25)" class="active">Focus</button>
-        <button onclick="setMode(5)">Short</button>
-        <button onclick="setMode(15)">Long</button>
+        <div id="time">25:00</div>
+
+        <div class="modes">
+            <button onclick="setMode(event,25)" class="active">Focus</button>
+            <button onclick="setMode(event,5)">Short</button>
+            <button onclick="setMode(event,15)">Long</button>
+        </div>
+
+        <div class="buttons">
+            <button onclick="startTimer()">Start</button>
+            <button onclick="pauseTimer()">Pause</button>
+            <button onclick="resetTimer()">Reset</button>
+        </div>
     </div>
 
-    <div class="buttons">
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
+    <!-- JUICE -->
+    <div class="container juice-card">
+        <h2>🧃 Energy</h2>
+
+        <div class="cup">
+            <div class="liquid" id="liquid"></div>
+        </div>
+
+        <p id="energyText">Stay focused...</p>
+        <button onclick="drinkJuice()">Drink</button>
     </div>
+
 </div>
 
 <script>
 let time = 1500;
-let interval = null;
 let totalTime = time;
+let interval = null;
+let energy = 0;
 
 const timeDisplay = document.getElementById("time");
 const progress = document.querySelector(".progress");
 
+/* TIMER */
 function updateDisplay() {
     let min = Math.floor(time / 60);
     let sec = time % 60;
+
     timeDisplay.textContent =
-        `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
 
     let progressValue = 565 - (565 * time / totalTime);
     progress.style.strokeDashoffset = progressValue;
@@ -151,6 +196,12 @@ function startTimer() {
         if (time > 0) {
             time--;
             updateDisplay();
+
+            if (energy < 100) {
+                energy += 0.5;
+                updateJuice();
+            }
+
         } else {
             clearInterval(interval);
             interval = null;
@@ -167,20 +218,43 @@ function pauseTimer() {
 function resetTimer() {
     pauseTimer();
     time = totalTime;
+    energy = 0;
     updateDisplay();
+    updateJuice();
 }
 
-function setMode(minutes) {
+function setMode(e, minutes) {
     document.querySelectorAll(".modes button").forEach(btn => btn.classList.remove("active"));
-    event.target.classList.add("active");
+    e.target.classList.add("active");
 
     pauseTimer();
     time = minutes * 60;
     totalTime = time;
+    energy = 0;
+
     updateDisplay();
+    updateJuice();
+}
+
+/* JUICE */
+function updateJuice() {
+    const liquid = document.getElementById("liquid");
+    liquid.style.height = energy + "%";
+
+    let text = document.getElementById("energyText");
+
+    if (energy < 30) text.textContent = "Low energy 😴";
+    else if (energy < 70) text.textContent = "Getting there ⚡";
+    else text.textContent = "FULL POWER 🚀";
+}
+
+function drinkJuice() {
+    energy = 0;
+    updateJuice();
 }
 
 updateDisplay();
+updateJuice();
 </script>
 
 </body>
