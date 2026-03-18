@@ -18,7 +18,8 @@ body {
     background: url('mary.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* KEY CHANGE */
+    padding: 0 80px; /* spacing from edges */
     position: relative;
 }
 
@@ -36,7 +37,8 @@ body::before {
     position: relative;
     z-index: 1;
     display: flex;
-    gap: 50px;
+    justify-content: space-between; /* push both cards apart */
+    width: 100%;
 }
 
 /* Glass card */
@@ -118,9 +120,15 @@ circle {
 
 /* Mobile */
 @media (max-width: 700px) {
+    body {
+        justify-content: center;
+        padding: 20px;
+    }
+
     .main {
         flex-direction: column;
         align-items: center;
+        gap: 30px;
     }
 }
 </style>
@@ -130,7 +138,7 @@ circle {
 
 <div class="main">
 
-    <!-- TIMER -->
+    <!-- LEFT: TIMER -->
     <div class="container">
         <h2>🍅 Pomodoro</h2>
 
@@ -154,7 +162,7 @@ circle {
         </div>
     </div>
 
-    <!-- JUICE -->
+    <!-- RIGHT: JUICE -->
     <div class="container juice-card">
         <h2>🧃 Energy</h2>
 
